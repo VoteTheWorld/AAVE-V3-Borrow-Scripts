@@ -9,6 +9,7 @@ async function main() {
     wethTokenAddress = networkConfig[network.config.chainId].wethToken
     await approveErc20(wethTokenAddress, pool.address, AMOUNT, deployer)
 
+    //have some mistakes to interact with pool address, always revert
     console.log("Depositing WETH...")
     const txResponse = await pool.deposit(wethTokenAddress, AMOUNT, deployer, 0)
     await txResponse.wait(6)
