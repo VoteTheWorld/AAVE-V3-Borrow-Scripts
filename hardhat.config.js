@@ -33,6 +33,8 @@ module.exports = {
             //   },
             saveDeployments: true,
             chainId: 5,
+            gas: 2100000,
+            gasPrice: 8000000000,
         },
     },
     etherscan: {

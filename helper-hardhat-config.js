@@ -16,7 +16,6 @@ const networkConfig = {
         poolAddressesProvider: "0x2f39d218133AFaB8F2B819B1066c7E434Ad94E9e",
         daiEthPriceFeed: "0x773616E4d11A78F511299002da57A0a94577F1f4",
         daiUSDPriceFeed: "0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9",
-        borrowAddressesProvider: "0x87870bca3f3fd6335c3f4ce8392d69350b4fa4e2",
     },
     5: {
         name: "goerli",
@@ -26,6 +25,10 @@ const networkConfig = {
         keepersUpdateInterval: "30",
         raffleEntranceFee: "100000000000000000", // 0.1 ETH
         callbackGasLimit: "500000", // 500,000 gas
+        wethToken: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
+        daiToken: "0x73967c6a0904aA032C103b4104747E88c566B1A2",
+        poolAddressesProvider: "0xC911B590248d127aD18546B186cC6B324e99F02c",
+        daiUSDPriceFeed: "0x0d79df66BE487753B02D015Fb622DED7f0E9798d",
     },
     1: {
         name: "mainnet",

@@ -1,7 +1,7 @@
 const { getNamedAccounts, ethers } = require("hardhat")
 const { networkConfig } = require("../helper-hardhat-config")
 
-const AMOUNT = ethers.utils.parseEther("1")
+const AMOUNT = ethers.utils.parseEther("0.1")
 
 async function getWeth() {
     const { deployer } = await getNamedAccounts()
@@ -15,7 +15,7 @@ async function getWeth() {
     await txResponse.wait(1)
 
     const wethBalance = await IWeth.balanceOf(deployer)
-    console.log(`GOT ${wethBalance} WETH`)
+    console.log(`Balance of this account has ${wethBalance} WETH`)
 }
 
 module.exports = { getWeth, AMOUNT }

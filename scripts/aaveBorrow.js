@@ -10,13 +10,12 @@ async function main() {
     await approveErc20(wethTokenAddress, pool.address, AMOUNT, deployer)
 
     console.log("Depositing WETH...")
-    await pool.deposit(wethTokenAddress, AMOUNT, deployer, 0)
+    const txResponse = await pool.deposit(wethTokenAddress, AMOUNT, deployer, 0)
+    await txResponse.wait(6)
     console.log(`Desposited ${AMOUNT} WETH`)
 
     let { availableBorrowsBase } = await getBorrowUserData(pool, deployer)
-
     const daiPrice = await getDaiPrice()
-
     const amountDaiToBorrow =
         availableBorrowsBase.toString() * 0.95 * (1 / daiPrice.toNumber())
     const amountDaiToBorrowWei = ethers.utils.parseEther(
@@ -24,57 +23,46 @@ async function main() {
     )
     console.log(`You can borrow ${amountDaiToBorrow.toString()} DAI`)
 
-    // const borrow = await getborrowAddress(deployer)
-    // console.log("1111")
-    // await borrowDai(
-    //     networkConfig[network.config.chainId].daiToken,
-    //     pool,
-    //     amountDaiToBorrowWei,
-    //     deployer
-    // )
-    // await getBorrowUserData(pool, deployer)
+    await borrowDai(
+        networkConfig[network.config.chainId].daiToken,
+        pool,
+        amountDaiToBorrowWei,
+        deployer
+    )
+    await getBorrowUserData(pool, deployer)
 
-    // await repay(
-    //     amountDaiToBorrowWei,
-    //     networkConfig[network.config.chainId].daiToken,
-    //     pool,
-    //     deployer
-    // )
-    // await getBorrowUserData(pool, deployer)
+    await repay(
+        amountDaiToBorrowWei,
+        networkConfig[network.config.chainId].daiToken,
+        pool,
+        deployer
+    )
+    await getBorrowUserData(pool, deployer)
 }
 
-// async function getborrowAddress(account) {
-//     const borrowAddress = await ethers.getContractAt(
-//         "InitializableImmutableAdminUpgradeabilityProxy",
-//         networkConfig[network.config.chainId].borrowAddressesProvider,
-//         account
-//     )
-//     return borrowAddress
-// }
+async function repay(amountToRepay, tokenAddress, poolAddress, account) {
+    await approveErc20(wethTokenAddress, pool.address, AMOUNT, deployer)
+    const txResponse = await poolAddress.repay(
+        tokenAddress,
+        amountToRepay,
+        1,
+        account
+    )
+    await txResponse.wait(1)
+    console.log("Repay successfully!")
+}
 
-// async function repay(amountToRepay, tokenAddress, poolAddress, account) {
-//     // await approveErc20(wethTokenAddress, pool.address, AMOUNT, deployer)
-//     const txResponse = await poolAddress.repay(
-//         tokenAddress,
-//         amountToRepay,
-//         1,
-//         account
-//     )
-//     await txResponse.wait(1)
-//     console.log("Repay successfully!")
-// }
-
-// async function borrowDai(tokenAddress, poolAddress, amountToBorrow, account) {
-//     const borrowTx = await poolAddress.borrow(
-//         tokenAddress,
-//         amountToBorrow,
-//         1,
-//         0,
-//         account
-//     )
-//     await borrowTx.wait(1)
-//     console.log("Borrow successfully!")
-// }
+async function borrowDai(tokenAddress, poolAddress, amountToBorrow, account) {
+    const borrowTx = await poolAddress.borrow(
+        tokenAddress,
+        amountToBorrow,
+        1,
+        0,
+        account
+    )
+    await borrowTx.wait(1)
+    console.log("Borrow successfully!")
+}
 
 async function getPoolAddress(account) {
     const poolAddressesProvider = await ethers.getContractAt(
@@ -97,9 +85,6 @@ async function approveErc20(tokenAddress, pooladdress, Amount, signer) {
 async function getBorrowUserData(pool, account) {
     const { totalCollateralBase, totalDebtBase, availableBorrowsBase } =
         await pool.getUserAccountData(account)
-    // totalCollateralBaseD = totalCollateralBase * 1e7
-    // totalDebtBaseD = totalDebtBase * 1e7
-    // availableBorrowsBaseD = availableBorrowsBase * 1e7
     console.log(`You have ${totalCollateralBase} worth of ETH deposited.`)
     console.log(`You have ${totalDebtBase} worth of ETH borrowed.`)
     console.log(`You can borrow ${availableBorrowsBase} worth of ETH.`)
