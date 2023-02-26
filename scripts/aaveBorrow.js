@@ -9,10 +9,9 @@ async function main() {
     wethTokenAddress = networkConfig[network.config.chainId].wethToken
     await approveErc20(wethTokenAddress, pool.address, AMOUNT, deployer)
 
-    //have some mistakes to interact with pool address, always revert
     console.log("Depositing WETH...")
     const txResponse = await pool.deposit(wethTokenAddress, AMOUNT, deployer, 0)
-    await txResponse.wait(6)
+    // await txResponse.wait(6)
     console.log(`Desposited ${AMOUNT} WETH`)
 
     let { availableBorrowsBase } = await getBorrowUserData(pool, deployer)
@@ -42,7 +41,12 @@ async function main() {
 }
 
 async function repay(amountToRepay, tokenAddress, poolAddress, account) {
-    await approveErc20(wethTokenAddress, pool.address, AMOUNT, deployer)
+    await approveErc20(
+        tokenAddress,
+        poolAddress.address,
+        amountToRepay,
+        account
+    )
     const txResponse = await poolAddress.repay(
         tokenAddress,
         amountToRepay,
@@ -54,6 +58,7 @@ async function repay(amountToRepay, tokenAddress, poolAddress, account) {
 }
 
 async function borrowDai(tokenAddress, poolAddress, amountToBorrow, account) {
+    // bug is here
     const borrowTx = await poolAddress.borrow(
         tokenAddress,
         amountToBorrow,
@@ -72,6 +77,7 @@ async function getPoolAddress(account) {
         account
     )
     const pooladdress = await poolAddressesProvider.getPool()
+    console.log(`Pool address is ${pooladdress}`)
     const pool = await ethers.getContractAt("Ipool", pooladdress, account)
     return pool
 }

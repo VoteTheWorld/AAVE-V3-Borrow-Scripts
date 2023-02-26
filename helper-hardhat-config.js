@@ -25,8 +25,8 @@ const networkConfig = {
         keepersUpdateInterval: "30",
         raffleEntranceFee: "100000000000000000", // 0.1 ETH
         callbackGasLimit: "500000", // 500,000 gas
-        wethToken: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
-        daiToken: "0x73967c6a0904aA032C103b4104747E88c566B1A2",
+        wethToken: "0xCCB14936C2E000ED8393A571D15A2672537838Ad",
+        daiToken: "0xBa8DCeD3512925e52FE67b1b5329187589072A55",
         poolAddressesProvider: "0xC911B590248d127aD18546B186cC6B324e99F02c",
         daiUSDPriceFeed: "0x0d79df66BE487753B02D015Fb622DED7f0E9798d",
     },
